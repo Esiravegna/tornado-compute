@@ -18,7 +18,7 @@ class Pipeline(object):
     Takes care of running computations.
     """
 
-    def __init__(self, build_network):
+    def __init__(self):
         """
         Prepare computation pipeline by loading the keras model
         """
