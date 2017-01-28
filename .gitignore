@@ -262,3 +262,4 @@ database.db
 logs
 local_settings.sh
 nltk_data
+model

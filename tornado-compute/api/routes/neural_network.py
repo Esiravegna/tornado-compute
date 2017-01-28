@@ -7,6 +7,7 @@ import tornado.web
 import tornado.gen
 import dualprocessing
 import logging
+import json
 
 
 class NeuralNetwork(tornado.web.RequestHandler):
@@ -22,7 +23,7 @@ class NeuralNetwork(tornado.web.RequestHandler):
         self.broker = broker
 
     def get(self):
-        self.render('templates/vgg.html')
+        self.render('..//templates/vgg.html')
 
     @tornado.gen.coroutine
     def post(self):
@@ -32,10 +33,10 @@ class NeuralNetwork(tornado.web.RequestHandler):
                 url = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Serpent_roi_bandes_grises_01.JPG/300px-Serpent_roi_bandes_grises_01.JPG"
             call = dualprocessing.AsyncCall("predict", url=url)
             response = yield self.broker.submit_call_async(call)
-            if response.sucess:
-                self.write(response.result)
+            if response.success:
+                self.write({'data' :[{u'label': a_result[1], u'proba': str(a_result[2])} for a_result in response.result]})
             else:
-                raise response.Error
+                raise response.error
         except:
             def lastExceptionString():
                 exc_type, ex, exc_tb = sys.exc_info()
