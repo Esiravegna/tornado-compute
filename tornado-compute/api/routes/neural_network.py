@@ -29,9 +29,8 @@ class NeuralNetwork(tornado.web.RequestHandler):
     def post(self):
         try:
             url = self.get_argument("url", None)
-            if not url:  # take a default image
-                url = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Serpent_roi_bandes_grises_01.JPG/300px-Serpent_roi_bandes_grises_01.JPG"
-            call = dualprocessing.AsyncCall("predict", url=url)
+            base64_encoded = self.get_argument("base64_encoded", None)
+            call = dualprocessing.AsyncCall("predict", url=url, base64_encoded=base64_encoded)
             response = yield self.broker.submit_call_async(call)
             if response.success:
                 self.write({'data' :[{u'label': a_result[1], u'proba': str(a_result[2])} for a_result in response.result]})
